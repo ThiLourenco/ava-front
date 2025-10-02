@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+
+    --background: #f8f9fa;
+    --foreground: #212529;
+    --surface: #ffffff;
+    --card: #ffffff;
+
+    --primary: #4C6EF5;
+    --primary-foreground: #ffffff;
+
+    --success: #28a745;
+    --success-foreground: #ffffff;
+    --danger: #dc3545;
+    --danger-foreground: #ffffff;
+    --warning: #ffc107;
+    --warning-foreground: #212529;
+    --info: #0d6efd;
+    --info-foreground: #ffffff;
+
+    --border: #dee2e6;
+    --input: #ffffff;
+    --input-foreground: #212529;
+    --radius: 0.75rem;
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+
+  .dark {
+
+    --background: #272727;
+    --foreground: #e9ecef;
+    --surface: #1e1e1e;
+    --card: #1e1e1e;
+
+    --primary: #6684FF;
+    --primary-foreground: #121212;
+
+    --success: #20c997;
+    --success-foreground: #121212;
+    --danger: #f76473;
+    --danger-foreground: #121212;
+    --warning: #ffd166;
+    --warning-foreground: #121212;
+    --info: #6684FF;
+    --info-foreground: #121212;
+
+    --border: #dee2e6;
+    --input: #1e1e1e;
+    --input-foreground: #e9ecef;
+    --radius: 0.75rem;
+    --shadow: 0 4px 6px -1px rgb(255 255 255 / 0.05), 0 2px 4px -2px rgb(255 255 255 / 0.05);
+  }
+}
+
+@layer base {
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    transition-property: background-color, color;
+    transition-duration: 200ms;
+    transition-timing-function: ease-in-out;
+  }
+}
+
+@import '@vime/core/themes/default.css';
