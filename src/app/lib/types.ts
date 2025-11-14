@@ -1,9 +1,10 @@
 export interface User {
   name: string;
-  cpf: string;
-  avatarUrl: string;
   email: string;
+  cpf: string;
+  avatarUrl?: string;
   phone?: string;
+  id: string;
 }
 
 export interface Resource {
@@ -58,4 +59,13 @@ export interface DashboardData {
     user: User;
     courses: Course[];
     lastAccessedCourse: Course | null;
+}
+
+export interface AuthCredentials {
+  email: string;
+  password: string;
+}
+
+export interface AuthResponse {
+  token: string;
 }

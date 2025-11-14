@@ -21,7 +21,7 @@ const CourseCard = ({ course }: { course: Course }) => {
 
   return (
     <div className="bg-foreground p-4 rounded-lg shadow-md flex flex-col h-full">
-      <p className="text-xs text-gray-500">Matrícula: {course.matricula}</p>
+      <p className="text-xs text-gray-500">Descrição: {course.description}</p>
       <h4 className="font-bold my-2 flex-grow">{course.title}</h4>
       
       <div className="w-full bg-surface rounded-full h-1.5">

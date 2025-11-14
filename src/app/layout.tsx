@@ -2,6 +2,8 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "./components/ThemeProvider";
+import Providers from "./providers";
+import { AuthProvider } from "./context/AuthContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +23,9 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <div className="flex">
             <main className="flex-1 min-h-screen bg-background text-foreground transition-colors p-6">
-              {children}
+              <AuthProvider>
+              <Providers>{children}</Providers>
+            </AuthProvider>
             </main>
           </div>
         </ThemeProvider>
