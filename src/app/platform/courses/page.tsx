@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getMe, getCourses, getUserEnrollments, createEnrollment } from "@/app/lib/api";
 
+import { Loader2, Search } from "lucide-react";
+
 type Filter = "all" | "not_started" | "in_progress" | "completed";
 
 export default function CoursesHomePage() {
@@ -13,8 +15,7 @@ export default function CoursesHomePage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
   const router = useRouter();
-
-  // Calcula o progresso de um curso com base nas lições.
+ 
   const calculateCourseProgress = (course: any): number => {
     const modules = course?.modules ?? [];
     const lessons = modules.flatMap((m: any) => m.lessons ?? []);
@@ -31,8 +32,6 @@ export default function CoursesHomePage() {
     return Math.min(Math.round(averageProgress), 100);
   };
 
-
-   // Carrega cursos e matrículas do usuário.
   const loadCoursesAndEnrollments = async () => {
     try {
       const user = await getMe();
@@ -64,9 +63,6 @@ export default function CoursesHomePage() {
     }
   };
 
-  /**
-   * Inscrição em um novo curso
-   */
   const handleEnroll = async (courseId: string) => {
     try {
       const user = await getMe();
@@ -81,9 +77,6 @@ export default function CoursesHomePage() {
     loadCoursesAndEnrollments();
   }, []);
 
-  /**
-   * Aplicação de busca e filtro
-   */
   const filteredEnrollments = enrollments
     .filter((e) =>
       e.course.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -104,25 +97,34 @@ export default function CoursesHomePage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64 text-gray-500">
-        Carregando cursos...
+      
+      <div className="flex flex-col justify-center items-center h-64 gap-2 text-gray-500">
+        <Loader2 className="h-6 w-6 animate-spin" />
+        <span>Carregando cursos...</span>
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-6">
-      <h1 className="text-3xl font-bold">Meus Cursos</h1>
+    
+    <div className="max-w-9xl mx-auto p-6 md:p-8 space-y-6">
+      <h1 className="text-3xl font-bold text-foreground">Cursos</h1>
 
       {/* Busca e filtros */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <input
-          type="text"
-          placeholder="Buscar curso..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="border rounded-md px-4 py-2 w-full sm:w-80 focus:ring-2 focus:ring-blue-400"
-        />
+        {/* Input de busca com ícone */}
+        <div className="relative w-full sm:w-80">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+          <input
+            type="text"
+            placeholder="Buscar curso..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            
+            className="border rounded-md px-4 py-2 w-full sm:w-80 focus:ring-2 focus:ring-blue-400 pl-10"
+          />
+        </div>
+        
         <div className="flex gap-2 flex-wrap">
           {[
             { key: "all", label: "Todos" },
@@ -132,7 +134,7 @@ export default function CoursesHomePage() {
           ].map(({ key, label }) => (
             <button
               key={key}
-              onClick={() => setFilter(key as Filter)}
+              onClick={() => setFilter(key as Filter)}         
               className={`px-4 py-2 rounded-md text-sm ${
                 filter === key
                   ? "bg-blue-600 text-white"
@@ -147,7 +149,7 @@ export default function CoursesHomePage() {
 
       {/* Cursos matriculados */}
       <div>
-        <h2 className="text-xl font-semibold mb-4">Cursos matriculados</h2>
+        <h2 className="text-xl font-semibold mb-4 text-foreground">Cursos matriculados</h2>
         {filteredEnrollments.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredEnrollments.map((enrollment) => {
@@ -156,6 +158,7 @@ export default function CoursesHomePage() {
 
               let statusLabel = "Não iniciado";
               let buttonLabel = "Iniciar Curso";
+              
               let buttonColor = "bg-blue-600 hover:bg-blue-700";
 
               if (progress === 0) {
@@ -167,16 +170,16 @@ export default function CoursesHomePage() {
               } else {
                 statusLabel = "Concluído";
                 buttonLabel = "Ver Curso";
+                
                 buttonColor = "bg-green-600 hover:bg-green-700";
               }
-
-              return (
+              return (             
                 <div
                   key={enrollment.id}
-                  className="border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200"
+                  className="bg-card  border-border rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col"
                 >
-                  <h3 className="text-lg font-semibold mb-2">{course.title}</h3>
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                  <h3 className="text-lg font-semibold mb-2 text-foreground">{course.title}</h3>
+                  <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
                     {course.description}
                   </p>
 
@@ -205,7 +208,7 @@ export default function CoursesHomePage() {
                     </span>
 
                     <button
-                      onClick={() => router.push(`/platform/courses/${course.id}`)}
+                      onClick={() => router.push(`/platform/courses/${course.id}`)}                    
                       className={`${buttonColor} text-white text-sm px-4 py-2 rounded transition-colors duration-200`}
                     >
                       {buttonLabel}
@@ -216,36 +219,42 @@ export default function CoursesHomePage() {
             })}
           </div>
         ) : (
-          <div className="text-gray-500 text-sm">Nenhum curso matriculado.</div>
+          
+          <div className="text-gray-500 text-sm text-center py-10">
+            Nenhum curso matriculado.
+          </div>
         )}
       </div>
 
       {/* Cursos disponíveis */}
       <div>
-        <h2 className="text-xl font-semibold mt-10 mb-4">Cursos disponíveis</h2>
+        <h2 className="text-xl font-semibold mt-10 mb-4 text-foreground">Cursos disponíveis</h2>
         {filteredAvailableCourses.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredAvailableCourses.map((course) => (
+              
               <div
                 key={course.id}
-                className="border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200"
+                className="bg-card border border-border rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col"
               >
-                <h3 className="text-lg font-semibold mb-2">{course.title}</h3>
-                <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                <h3 className="text-lg font-semibold mb-2 text-foreground">{course.title}</h3>
+                <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
                   {course.description}
                 </p>
 
                 <button
-                  onClick={() => handleEnroll(course.id)}
-                  className="bg-gray-800 hover:bg-gray-900 text-white text-sm px-4 py-2 rounded transition-colors duration-200 w-full"
+                  onClick={() => handleEnroll(course.id)}            
+                  className="bg-gray-800 hover:bg-gray-900 text-white text-sm px-4 py-2 rounded transition-colors duration-200 w-full mt-auto"
                 >
                   Inscrever-se
                 </button>
               </div>
             ))}
           </div>
-        ) : (
-          <div className="text-gray-500 text-sm">Nenhum curso disponível.</div>
+        ) : (   
+          <div className="text-gray-500 text-sm text-center py-10">
+            Nenhum curso disponível.
+          </div>
         )}
       </div>
     </div>

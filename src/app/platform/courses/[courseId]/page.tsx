@@ -12,7 +12,7 @@ export default async function CoursePage({ params }: { params: Promise<{ courseI
   }
     return (
     <div>
-        <CoursePageClient course={course} />;
+        <CoursePageClient course={course} />
     </div>
   );
 }
