@@ -14,7 +14,7 @@ const CourseCard = ({ course }: { course: Course }) => {
 
   
   const statusText = isCompleted
-    ? `${course.progress}% Concluído`
+    ? `${course.progress}%`
     : isNotStarted
     ? 'Não iniciado'
     : `${course.progress}% em andamento`;

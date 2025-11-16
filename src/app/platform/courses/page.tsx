@@ -191,7 +191,7 @@ export default function CoursesHomePage() {
                     />
                   </div>
                   <p className="text-xs text-gray-500 mb-2">
-                    Progresso: {progress}%
+                    {progress}%
                   </p>
 
                   <div className="flex justify-between items-center">

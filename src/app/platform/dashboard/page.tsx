@@ -134,7 +134,7 @@ export default function DashboardPage() {
                 ></div>
               </div>
               <p className="text-xs text-muted-foreground mt-1">
-                Progresso: {lastAccessedCourse.progress.toFixed(0)}%
+                {lastAccessedCourse.progress.toFixed(0)}%
               </p>
             </div>
           )}
